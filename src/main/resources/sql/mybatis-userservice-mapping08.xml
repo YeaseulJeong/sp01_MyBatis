@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- sql 구문의 재사용성
+1) sql   2) include  -->
+
+<mapper namespace="UserMapper08">
+
+	<resultMap type="user" id="userSelectRM">    <!-- select 구문일 때  컬럼명과 필드 값이 다를때 alias 매번 쓰기 귀찮고 힘드니까 사용한다 -->
+		<result property="userId" column="user_id"/>
+		<result property="userName" column="user_name"/>
+		<result property="password" column="password"/>
+		<result property="age" column="age"/>
+		<result property="grade" column="grade"/>
+		<result property="regDate" column="reg_date"/>
+	</resultMap>
+	
+	
+	<sql id="select-users">
+		SELECT 
+		user_id, user_name, password, age, grade, reg_date
+		FROM users
+	</sql>
+	
+	<sql id="orderby-userid-desc">
+		ORDER BY user_id DESC
+	</sql>
+	
+	
+	<!-- 이런게 정적인 쿼리 문 _Static Query이고 여태까지 이렇게 해왔다 -->
+	<select id="getUserList" resultMap="userSelectRM" parameterType="string">
+		<include refid="select-users"></include>
+		WHERE user_name=#{VALUE}
+	</select>
+	
+	<!-- 동적인 쿼리 문 _Dynamic Query이고 여태까지 이렇게 해왔다 (select문에서만 해당함)-->
+	<select id="getUserList01" resultMap="userSelectRM" parameterType="string">
+		<include refid="select-users"></include>
+		<where>
+			<if test="userName !=null">
+				user_name LIKE #{userName}
+			</if>
+			<if test="age !=null">
+				OR age LIKE #{age}
+			</if>
+		</where>
+		
+		<include refid="orderby-userid-desc"></include>
+	</select>
+	
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 1. properties 파일 wiring -->
+	<properties resource="config/dbconn.properties"></properties>
+
+	<settings>
+		<setting name='jdbcTypeForNull' value="NULL"></setting>     <!-- ORACLE을 위한 NULL 세팅  -->
+		<setting name='mapUnderscoreToCamelCase' value="true"></setting>
+	</settings>
+	
+
+	<!-- 2. vo 클래스 wiring -->
+	<typeAliases>
+		<typeAlias type="ibatis.services.domain.User" alias="user"/>
+	</typeAliases>
+	
+	
+	<!-- 3. DB 서버 정보를 wiring -->
+	<environments default="aa">
+		<environment id="aa">
+			<transactionManager type="JDBC"/>
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="${jdbc.mysql.driver}"/> <!-- setDriver("com.mysql.cj.jdbc.Driver") -->
+				<property name="url" value="${jdbc.mysql.url}"/>
+				<property name="username" value="${jdbc.mysql.username}"/>
+				<property name="password" value="${jdbc.mysql.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	
+	<!-- 4. mapper를 wiring -->
+	<mappers>
+	
+	<mapper resource="sql/mybatis-userservice-mapping.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping01.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping02.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping03.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping05.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping07.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping08.xml"/>
+	<mapper resource="sql/mybatis-userservice-mapping10.xml"/>
+	
+	</mappers>
+
+</configuration>

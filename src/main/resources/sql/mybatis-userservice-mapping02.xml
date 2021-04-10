@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="UserMapper02">
+	<select id="getUser01" parameterType="string" resultType="user">
+		SELECT 
+		user_id AS userId, user_name AS userName, password, age, grade, reg_date AS regDate
+		FROM users
+		WHERE user_id LIKE #{VALUE}
+	</select>
+	
+	<select id="getUser02" parameterType="user" resultType="user">
+		SELECT 
+		user_id AS userId, user_name AS userName, password, age, grade, reg_date AS regDate
+		FROM users
+		WHERE user_id LIKE #{userId}
+	</select>
+	
+	<!-- 여기까지 와일드 카드를 값에다가 찔러 넣어서 mapper 에서 함께 쓰는 방법 연습 -->
+	
+	
+	<select id="getUser03" parameterType="string" resultType="user">
+		SELECT 
+		user_id AS userId, user_name AS userName, password, age, grade, reg_date AS regDate
+		FROM users
+		WHERE user_id LIKE #{VALUE} '%'
+	</select>
+	
+
+	<select id="getUser04" parameterType="user" resultType="user">
+		SELECT 
+		user_id AS userId, user_name AS userName, password, age, grade, reg_date AS regDate
+		FROM users
+		WHERE user_id LIKE '%' #{userId} 
+	</select>
+	
+
+</mapper>

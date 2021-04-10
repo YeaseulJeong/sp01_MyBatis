@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--   완벽한 형태의 sql문
+mybatis-userservice-mapping10.xml  +  SqlMapConfig.xml  -->
+
+<mapper namespace="UserMapper10">
+
+	<!-- <resultMap type="user" id="userSelectRM">    select 구문일 때  컬럼명과 필드 값이 다를때 alias 매번 쓰기 귀찮고 힘드니까 사용한다
+		<result property="userId" column="user_id"/>
+		<result property="userName" column="user_name"/>
+		<result property="password" column="password"/>
+		<result property="age" column="age"/>
+		<result property="grade" column="grade"/>
+		<result property="regDate" column="reg_date"/>
+	</resultMap>  
+	SqlMapConfig.xml에서 <setting name='mapUnderscoreToCamelCase' value="true"></setting> 를 써주면 한번에 해결됨
+	_ 하지만 언더바랑 카멜케이스만 호환해준다 만약 두개가 다를 경우는 resultMap 으로 써야한다  -->
+	
+	
+	<insert id="addUser" parameterType="user">
+		INSERT INTO
+		users (user_id, user_name, password, age, grade, reg_date)
+		VALUES(#{userId}, #{userName}, #{password}, #{age}, #{grade},#{regDate})
+	</insert>
+	
+	<update id="updateUser" parameterType="user">
+		UPDATE
+		users
+		SET user_name = #{userName} 
+		WHERE user_id = #{userId}
+	</update>
+	
+	<delete id="removeUser" parameterType="string">
+		DELETE FROM
+		users
+		WHERE user_id=#{VALUE}
+	</delete>
+	
+	
+	
+	<sql id="select-users">
+		SELECT 
+		user_id, user_name, password, age, grade, reg_date
+		FROM users
+	</sql>
+	
+	<sql id="orderby-userid-desc">
+		ORDER BY user_id DESC
+	</sql>
+	
+	
+	
+	<!-- 이런게 정적인 쿼리 문 _Static Query이고 여태까지 이렇게 해왔다 -->
+	<select id="getUser" resultType="user" parameterType="string">
+		<include refid="select-users"></include>
+		WHERE user_id=#{userId}
+	</select>
+	
+	
+	<!-- 동적인 쿼리 문 _Dynamic Query이고 여태까지 이렇게 해왔다 (select문에서만 해당함)-->
+	<select id="getUserList" resultType="user" parameterType="user">
+		<include refid="select-users"></include>
+		<where>
+			<if test="userName !=null">
+				user_name LIKE #{userName}
+			</if>
+			<if test="age !=null">
+				OR age LIKE #{age}
+			</if>
+		</where>
+		
+		<include refid="orderby-userid-desc"></include>
+	</select>
+	
+</mapper>
